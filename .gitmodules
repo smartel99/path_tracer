@@ -1,0 +1,6 @@
+[submodule "vendor/spdlog"]
+	path = vendor/spdlog
+	url = https://github.com/gabime/spdlog
+[submodule "vendor/argengine"]
+	path = vendor/argengine
+	url = https://github.com/juzzlin/Argengine
