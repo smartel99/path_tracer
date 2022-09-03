@@ -39,9 +39,9 @@ bool SaveToPng(const std::string& path, const std::vector<uint8_t>& data, const 
                              data.data(),
                              width * channelCount);
 
-    if (res != 0)
+    if (res == 0)
     {
-        PT_ERROR("stbi_write_png returned {}", res);
+        PT_ERROR("stbi_write_png returned an error.");
         return false;
     }
     else

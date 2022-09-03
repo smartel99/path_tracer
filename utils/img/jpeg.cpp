@@ -28,7 +28,8 @@
 #include "stb/stb_image_write.h"
 
 
-bool SaveToJpeg(const std::string& path, const std::vector<uint8_t>& data, const Arguments& args)
+bool SaveToJpeg(const std::string& path, const std::vector<uint8_t>& data, const Arguments&
+                                                                                 args)
 {
     static constexpr int channelCount = 4;    // RGBA.
     static constexpr int quality = 100;       // 1-100, higher number = higher quality, bigger file.
@@ -39,9 +40,9 @@ bool SaveToJpeg(const std::string& path, const std::vector<uint8_t>& data, const
                              data.data(),
                              quality);
 
-    if (res != 0)
+    if (res == 0)
     {
-        PT_ERROR("stbi_write_jpeg returned {}", res);
+        PT_ERROR("stbi_write_jpeg returned an error");
         return false;
     }
     else
