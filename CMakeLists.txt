@@ -3,7 +3,7 @@ project(path_tracer)
 
 set(CMAKE_CXX_STANDARD 20)
 
-file(GLOB_RECURSE SOURCES utils/*.*)
+file(GLOB_RECURSE SOURCES utils/*.* renderer/*.*)
 message(STATUS ${SOURCES})
 set(SOURCES
         ${SOURCES}
