@@ -27,6 +27,10 @@
 
 #include "utils/img/formatter.h"
 #include "utils/args/arguments.h"
+#include "utils/math/vec4.h"
+#include "utils/math/vec2.h"
+#include "renderer/ray.h"
+#include "renderer/camera.h"
 
 #include <vector>
 
@@ -37,15 +41,30 @@ public:
 
     const std::vector<uint8_t>& Finalize();
 
+    void SetColorAt(size_t x, size_t y, const Color4& col);
+    void SetColorAt(const Vec2& at, const Color4& col)
+    {
+        SetColorAt(static_cast<size_t>(at.x()), static_cast<size_t>(at.y()), col);
+    }
+    [[nodiscard]] Color4 GetColorAt(size_t x, size_t y) const;
+    [[nodiscard]] Color4 GetColorAt(const Vec2& at) const
+    {
+        return GetColorAt(static_cast<size_t>(at.x()), static_cast<size_t>(at.y()));
+    }
+
     [[nodiscard]] const std::vector<uint8_t>& GetData() const noexcept { return m_data; }
     [[nodiscard]] size_t                      GetWidth() const noexcept { return m_width; }
     [[nodiscard]] size_t                      GetHeight() const noexcept { return m_height; }
 
 private:
-    static constexpr size_t s_channelCount = 4; //!< Working in RGBA.
+    [[nodiscard]] static Color4 RayColor(const Ray& r);
+
+    static constexpr size_t s_channelCount = 4;    //!< Working in RGBA.
 
     size_t m_width  = 0;
     size_t m_height = 0;
+
+    Camera m_camera;
 
     std::vector<uint8_t> m_data = {};
 };
