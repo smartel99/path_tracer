@@ -1,8 +1,8 @@
 /**
- * @file    png.cpp
+ * @file    random.h
  * @author  Samuel Martel
  * @p       https://github.com/smartel99
- * @date    2022-08-28
+ * @date    2022-09-05
  *
  * @brief
  ******************************************************************************
@@ -21,33 +21,17 @@
  *   You should have received a copy of the GNU General Public License
  *   along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *****************************************************************************/
-#include "png.h"
-#include "utils/args/arguments.h"
-#include "utils/log.h"
 
-#include "stb/stb_image_write.h"
+#ifndef PATH_TRACER_RANDOM_H
+#define PATH_TRACER_RANDOM_H
 
+#include <random>
 
-bool SaveToPng(const std::string& path, const std::vector<uint8_t>& data, const Arguments& args)
+inline double MakeRandomDouble(double min = 0.0, double max = 1.0)
 {
-    static constexpr int channelCount = 4;    // RGBA.
-    int                  width        = static_cast<int>(args.Get<uint64_t>("width"));
-
-    stbi_flip_vertically_on_write(1);
-    int res = stbi_write_png(path.c_str(),
-                             width,
-                             static_cast<int>(args.Get<uint64_t>("height")),
-                             channelCount,
-                             data.data(),
-                             width * channelCount);
-
-    if (res == 0)
-    {
-        PT_ERROR("stbi_write_png returned an error.");
-        return false;
-    }
-    else
-    {
-        return true;
-    }
+    static std::uniform_real_distribution<double> distribution(0.0, 1.0);
+    static std::mt19937                           generator;
+    return min + (max - min) * distribution(generator);
 }
+
+#endif    // PATH_TRACER_RANDOM_H

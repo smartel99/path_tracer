@@ -31,12 +31,17 @@
 
 bool ImgSaver::Save(const std::string& path)
 {
-    switch(m_args.Get<ImgType>("format"))
+    return Save(m_args.Get<ImgType>("format"), path);
+}
+
+bool ImgSaver::Save(ImgType fmt, const std::string& filename)
+{
+    switch (fmt)
     {
         case ImgType::Png:
-            return SaveToPng(path, m_data, m_args);
+            return SaveToPng(filename, m_data, m_args);
         case ImgType::Jpeg:
-            return SaveToJpeg(path, m_data, m_args);
+            return SaveToJpeg(filename, m_data, m_args);
         default:
             PT_ERROR("Unknown image format");
             return false;

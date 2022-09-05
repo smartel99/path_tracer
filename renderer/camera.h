@@ -36,14 +36,11 @@ public:
                      double      height,
                      double      focalLength = 1.0,
                      const Vec3& origin      = {0.0, 0.0, 0.0}) noexcept
-    : m_vpWidth(width),
-      m_vpHeight(height),
-      m_focalLength(focalLength),
-      m_origin(origin),
-      m_horizontal(m_vpWidth, 0.0, 0.0),
-      m_vertical(0.0, m_vpHeight, 0.0),
+    : m_origin(origin),
+      m_horizontal(width, 0.0, 0.0),
+      m_vertical(0.0, height, 0.0),
       m_lowerLeftCorner(m_origin - m_horizontal / 2.0 - m_vertical / 2.0 -
-                        Vec3 {0.0, 0.0, m_focalLength})
+                        Vec3 {0.0, 0.0, focalLength})
     {
     }
 
@@ -53,10 +50,6 @@ public:
     }
 
 private:
-    double m_vpWidth     = 0.0;
-    double m_vpHeight    = 0.0;
-    double m_focalLength = 0.0;
-
     Vec3 m_origin          = {};
     Vec3 m_horizontal      = {};
     Vec3 m_vertical        = {};

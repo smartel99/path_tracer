@@ -26,6 +26,7 @@
 #define PATH_TRACER_FORMATTER_H
 
 #include "utils/args/arguments.h"
+#include "types.h"
 
 #include <vector>
 #include <string>
@@ -39,6 +40,7 @@ public:
     }
 
     bool Save(const std::string& filename);
+    bool Save(ImgType fmt, const std::string& filename);
 private:
     const std::vector<uint8_t>& m_data;
     const Arguments&            m_args;

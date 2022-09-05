@@ -58,6 +58,14 @@ Arguments::Arguments(int argc, char** argv) noexcept
       true,
       "Format of the output image. Currently supported: PNG, JPEG",
       "FMT");
+
+    ae.addOption(
+      {"-s", "--samples-per-pixel"},
+      [this](const std::string& value)
+      { m_params["samples-per-pixel"] = static_cast<uint64_t>(std::stoi(value)); },
+      false,
+      "Number of samples generated for each pixels. Defaults to 16");
+
     try
     {
         ae.parse();

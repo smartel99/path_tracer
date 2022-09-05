@@ -33,7 +33,10 @@
 class Object
 {
 public:
-    virtual std::optional<HitRecord> Hit(const Ray& r, double tMin, double tMax) const = 0;
+    [[nodiscard]] virtual std::optional<HitRecord> Hit(const Ray& r,
+                                                       double     tMin,
+                                                       double     tMax) const noexcept = 0;
+    virtual ~Object()                                                              = default;
 };
 
 #endif    // PATH_TRACER_OBJECT_H

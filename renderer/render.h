@@ -31,6 +31,7 @@
 #include "utils/math/vec2.h"
 #include "renderer/ray.h"
 #include "renderer/camera.h"
+#include "renderer/objects/object_list.h"
 
 #include <vector>
 
@@ -41,10 +42,10 @@ public:
 
     const std::vector<uint8_t>& Finalize();
 
-    void SetColorAt(size_t x, size_t y, const Color4& col);
-    void SetColorAt(const Vec2& at, const Color4& col)
+    void SetColorAt(size_t x, size_t y, const Color4& col, size_t samplesPerPixel=1);
+    void SetColorAt(const Vec2& at, const Color4& col, size_t samplesPerPixel = 1)
     {
-        SetColorAt(static_cast<size_t>(at.x()), static_cast<size_t>(at.y()), col);
+        SetColorAt(static_cast<size_t>(at.x()), static_cast<size_t>(at.y()), col, samplesPerPixel);
     }
     [[nodiscard]] Color4 GetColorAt(size_t x, size_t y) const;
     [[nodiscard]] Color4 GetColorAt(const Vec2& at) const
@@ -52,19 +53,27 @@ public:
         return GetColorAt(static_cast<size_t>(at.x()), static_cast<size_t>(at.y()));
     }
 
+    template<typename T, typename... Args>
+    void AddObject(Args&&... args)
+    {
+        m_objects.Add<T>(std::forward<Args>(args)...);
+    }
+
     [[nodiscard]] const std::vector<uint8_t>& GetData() const noexcept { return m_data; }
     [[nodiscard]] size_t                      GetWidth() const noexcept { return m_width; }
     [[nodiscard]] size_t                      GetHeight() const noexcept { return m_height; }
 
 private:
-    [[nodiscard]] static Color4 RayColor(const Ray& r);
+    [[nodiscard]] static Color4 RayColor(const Ray& r, const Object& world);
 
     static constexpr size_t s_channelCount = 4;    //!< Working in RGBA.
 
     size_t m_width  = 0;
     size_t m_height = 0;
+    size_t m_samplesPerPixel = 0;
 
-    Camera m_camera;
+    Camera     m_camera;
+    ObjectList m_objects = {};
 
     std::vector<uint8_t> m_data = {};
 };

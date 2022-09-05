@@ -1,8 +1,8 @@
 /**
- * @file    png.cpp
+ * @file    object_list.cpp
  * @author  Samuel Martel
  * @p       https://github.com/smartel99
- * @date    2022-08-28
+ * @date    2022-09-05
  *
  * @brief
  ******************************************************************************
@@ -21,33 +21,26 @@
  *   You should have received a copy of the GNU General Public License
  *   along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *****************************************************************************/
-#include "png.h"
-#include "utils/args/arguments.h"
-#include "utils/log.h"
-
-#include "stb/stb_image_write.h"
+#include "object_list.h"
 
 
-bool SaveToPng(const std::string& path, const std::vector<uint8_t>& data, const Arguments& args)
+std::optional<HitRecord> ObjectList::Hit(const Ray& r, double tMin, double tMax) const noexcept
 {
-    static constexpr int channelCount = 4;    // RGBA.
-    int                  width        = static_cast<int>(args.Get<uint64_t>("width"));
+    std::optional<HitRecord> closestHit;
+    double                   closest = tMax;
 
-    stbi_flip_vertically_on_write(1);
-    int res = stbi_write_png(path.c_str(),
-                             width,
-                             static_cast<int>(args.Get<uint64_t>("height")),
-                             channelCount,
-                             data.data(),
-                             width * channelCount);
+    for (const auto& object : m_objects)
+    {
+        auto hr = object->Hit(r, tMin, tMax);
+        if (hr)
+        {
+            if (hr->T <= closest)
+            {
+                closest    = hr->T;
+                closestHit = hr;
+            }
+        }
+    }
 
-    if (res == 0)
-    {
-        PT_ERROR("stbi_write_png returned an error.");
-        return false;
-    }
-    else
-    {
-        return true;
-    }
+    return closestHit;
 }

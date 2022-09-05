@@ -36,7 +36,8 @@ public:
     {
     }
 
-    std::optional<HitRecord> Hit(const Ray& r, double tMin, double tMax) const override;
+    [[nodiscard]] std::optional<HitRecord> Hit(const Ray& r, double tMin, double tMax) const
+      noexcept override;
 
 
 private:

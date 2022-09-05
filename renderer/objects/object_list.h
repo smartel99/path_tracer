@@ -1,8 +1,8 @@
 /**
- * @file    png.cpp
+ * @file    object_list.h
  * @author  Samuel Martel
  * @p       https://github.com/smartel99
- * @date    2022-08-28
+ * @date    2022-09-05
  *
  * @brief
  ******************************************************************************
@@ -21,33 +21,36 @@
  *   You should have received a copy of the GNU General Public License
  *   along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *****************************************************************************/
-#include "png.h"
-#include "utils/args/arguments.h"
-#include "utils/log.h"
 
-#include "stb/stb_image_write.h"
+#ifndef PATH_TRACER_OBJECT_LIST_H
+#define PATH_TRACER_OBJECT_LIST_H
 
+#include "object.h"
 
-bool SaveToPng(const std::string& path, const std::vector<uint8_t>& data, const Arguments& args)
+#include <memory>
+#include <vector>
+
+class ObjectList : public Object
 {
-    static constexpr int channelCount = 4;    // RGBA.
-    int                  width        = static_cast<int>(args.Get<uint64_t>("width"));
+public:
+    ObjectList() noexcept = default;
+    ObjectList(size_t capacity) { m_objects.reserve(capacity); }
 
-    stbi_flip_vertically_on_write(1);
-    int res = stbi_write_png(path.c_str(),
-                             width,
-                             static_cast<int>(args.Get<uint64_t>("height")),
-                             channelCount,
-                             data.data(),
-                             width * channelCount);
+    void Clear() noexcept { m_objects.clear(); }
 
-    if (res == 0)
+    template<typename T, typename... Args>
+    void Add(Args... args) noexcept
+        requires std::derived_from<T, Object> && std::constructible_from<T, Args...>
     {
-        PT_ERROR("stbi_write_png returned an error.");
-        return false;
+        m_objects.emplace_back(std::make_unique<T>(std::forward<Args>(args)...));
     }
-    else
-    {
-        return true;
-    }
-}
+
+    [[nodiscard]] std::optional<HitRecord> Hit(const Ray& r,
+                                               double     tMin,
+                                               double     tMax) const noexcept override;
+
+private:
+    std::vector<std::unique_ptr<Object>> m_objects = {};
+};
+
+#endif    // PATH_TRACER_OBJECT_LIST_H

@@ -23,7 +23,7 @@
  *****************************************************************************/
 #include "sphere.h"
 
-std::optional<HitRecord> Sphere::Hit(const Ray& r, double tMin, double tMax) const
+std::optional<HitRecord> Sphere::Hit(const Ray& r, double tMin, double tMax) const noexcept
 {
     Vec3   oc    = r.Origin() - m_center;
     double a     = r.Direction().LengthSquared();

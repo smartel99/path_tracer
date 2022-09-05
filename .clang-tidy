@@ -188,9 +188,31 @@ readability-redundant-smartptr-get,
 readability-redundant-string-cstr,
 readability-redundant-string-init,
 readability-simplify-subscript-expr,
-readability-static-accessed-through-instance'
-			
-WarningsAsErrors:  ''
+readability-static-accessed-through-instance,
+
+abesil-cleanup-ctad,
+
+bugprone-stringview-nullptr,
+bugprone-shared-ptr-array-mismatch,
+bugprone-unchecked-optional-access,
+
+cert-err33-c,
+
+clang-analyzer-apiModeling.Errno,
+clang-analyzer-apiModeling.TrustReturnsNonnull,
+clang-analyzer-cplusplus.StringChecker,
+
+misc-misleading-bidirectional,
+misc-misleading-identifier,
+
+modernize-macro-to-enum,
+
+portability-std-allocator-const,
+
+readability-container-contains,
+readability-duplicate-include'
+
+WarningsAsErrors: ''
 HeaderFilterRegex: '.*'
-FormatStyle:       'file'
-User:              CEP
+FormatStyle: 'file'
+User: Samuel
